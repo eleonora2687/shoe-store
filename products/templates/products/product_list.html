@@ -1,9 +1,19 @@
-<h1>Shoe Store</h1>
+<h1 style="text-align: center; margin-bottom: 40px;">Shoe Store</h1>
 
 {% for product in products %}
-    <div>
+    <div style="margin-bottom: 50px;">
+        
+        <img 
+            src="{{ product.image.url }}" 
+            alt="{{ product.name }}"
+            width="250"
+        >
+
         <h2>{{ product.name }}</h2>
+
         <p>{{ product.brand }}</p>
+
         <p>${{ product.price }}</p>
+
     </div>
 {% endfor %}
