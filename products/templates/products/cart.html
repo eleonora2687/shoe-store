@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Your Bag
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Your Shopping Bag 🛍️
+</h1>
+
+{% if products %}
+
+    {% for product in products %}
+
+    <div class="card mb-4 shadow-sm">
+
+        <div class="row g-0">
+
+            <div class="col-md-3">
+
+                {% if product.image %}
+
+                <img
+                    src="{{ product.image.url }}"
+                    class="img-fluid rounded-start"
+                    style="height:250px; object-fit:cover; width:100%;"
+                >
+
+                {% endif %}
+
+            </div>
+
+            <div class="col-md-9">
+
+                <div class="card-body">
+
+                    <h3>{{ product.name }}</h3>
+
+                    <p class="text-muted">
+                        {{ product.brand }}
+                    </p>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
+
+                    <a
+                        href="{% url 'decrease_quantity' product.id %}"
+                        class="btn btn-outline-danger"
+                    >
+                        -
+                    </a>
+
+                    <strong>{{ product.quantity }}</strong>
+
+                    <a
+                        href="{% url 'increase_quantity' product.id %}"
+                        class="btn btn-outline-success"
+                    >
+                        +
+                    </a>
+
+                </div>
+
+                    <p>
+                        Price:
+                        <strong>${{ product.price }}</strong>
+                    </p>
+
+                    <h4 class="text-success">
+                        Total:
+                        ${{ product.total_price }}
+                    </h4>
+
+                    <a
+                        href="{% url 'remove_from_cart' product.id %}"
+                        class="btn btn-danger mt-2"
+                    >
+                        Remove
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <div class="text-end">
+
+        <h2>
+            Grand Total: ${{ total }}
+        </h2>
+
+        <button class="btn btn-success btn-lg mt-3">
+            Proceed to Checkout
+        </button>
+
+    </div>
+
+{% else %}
+
+<div class="alert alert-info">
+    Your bag is empty.
+</div>
+
+{% endif %}
+
+{% endblock %}

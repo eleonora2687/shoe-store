@@ -59,3 +59,26 @@ def cart_view(request):
         'products': products,
         'total': total
     })
+
+def increase_quantity(request, id):
+    cart = request.session.get('cart', {})
+
+    if str(id) in cart:
+        cart[str(id)] += 1
+
+    request.session['cart'] = cart
+
+    return redirect('cart_view')
+
+def decrease_quantity(request, id):
+    cart = request.session.get('cart', {})
+
+    if str(id) in cart:
+        cart[str(id)] -= 1
+
+        if cart[str(id)] <= 0:
+            del cart[str(id)]
+
+    request.session['cart'] = cart
+
+    return redirect('cart_view')
