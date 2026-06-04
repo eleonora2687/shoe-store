@@ -6,6 +6,64 @@ Home
 
 {% block content %}
 
+
+<form method="GET" class="mb-4">
+
+    <div class="row">
+
+        <div class="col-md-5">
+
+            <input
+                type="text"
+                name="search"
+                class="form-control"
+                placeholder="Search shoes..."
+                value="{{ request.GET.search }}"
+            >
+
+        </div>
+
+        <div class="col-md-4">
+
+            <select
+                name="category"
+                class="form-select"
+            >
+
+                <option value="">
+                    All Categories
+                </option>
+
+                {% for category in categories %}
+
+                <option
+                    value="{{ category.id }}"
+                    {% if request.GET.category == category.id|stringformat:"s" %}
+                    selected
+                    {% endif %}
+                >
+                    {{ category.name }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <button class="btn btn-dark w-100">
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+
 <h1 class="text-center mb-5">
     Latest Shoes
 </h1>

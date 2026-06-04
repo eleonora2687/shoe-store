@@ -1,13 +1,36 @@
+from django.db.models import Q # type: ignore
 from django.shortcuts import redirect, render, get_object_or_404 # type: ignore
-from .models import Product
+from .models import Product, Category
 
 def product_list(request):
+
     products = Product.objects.all()
 
-    return render(request, 'products/product_list.html', {
-        'products': products
+    categories = Category.objects.all()
 
-    })
+    search = request.GET.get('search')
+
+    category_id = request.GET.get('category')
+
+    if search:
+        products = products.filter(
+            Q(name__icontains=search) |
+            Q(brand__icontains=search)
+        )
+
+    if category_id:
+        products = products.filter(
+            category_id=category_id
+        )
+
+    return render(
+        request,
+        'products/product_list.html',
+        {
+            'products': products,
+            'categories': categories
+        }
+    )
 
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
