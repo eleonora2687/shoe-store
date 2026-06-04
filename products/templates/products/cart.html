@@ -95,11 +95,13 @@ Your Bag
             Grand Total: ${{ total }}
         </h2>
 
-        <button class="btn btn-success btn-lg mt-3">
+        <a
+            href="{% url 'checkout' %}"
+            class="btn btn-success btn-lg mt-3"
+        >
             Proceed to Checkout
-        </button>
-
-    </div>
+        </a>
+            </div>
 
 {% else %}
 

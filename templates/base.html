@@ -38,6 +38,10 @@
 
         {% if user.is_authenticated %}
 
+        <a href="{% url 'my_orders' %}" class="btn btn-outline-light">
+    My Orders
+</a>
+
         <span class="text-white mt-2">
             Hello, {{ user.username }}
         </span>

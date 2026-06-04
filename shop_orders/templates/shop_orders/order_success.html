@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Order Complete
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h1 class="mb-4">
+        🎉 Order Placed Successfully!
+    </h1>
+
+    <h3>
+        Order #{{ order.id }}
+    </h3>
+
+    <p>
+        Total: ${{ order.total }}
+    </p>
+
+    <a href="/" class="btn btn-primary mt-3">
+        Continue Shopping
+    </a>
+
+</div>
+
+{% endblock %}
