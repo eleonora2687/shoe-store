@@ -60,4 +60,93 @@
 
 </div>
 
+
+<hr>
+
+<h3 class="mt-5">
+    Reviews
+</h3>
+
+{% for review in reviews %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <strong>
+            {{ review.user.username }}
+        </strong>
+
+        <p>
+            Rating:
+            {{ review.rating }}/5 ⭐
+        </p>
+
+        <p>
+            {{ review.comment }}
+        </p>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p>
+    No reviews yet.
+</p>
+
+{% endfor %}
+
+{% if user.is_authenticated %}
+
+<hr>
+
+<h3>
+    Leave a Review
+</h3>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+
+        <label>
+            Rating
+        </label>
+
+        {{ form.rating }}
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Comment
+        </label>
+
+        {{ form.comment }}
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-success"
+    >
+        Submit Review
+    </button>
+
+</form>
+
+{% else %}
+
+<div class="alert alert-info mt-4">
+
+    Please login to leave a review.
+
+</div>
+
+{% endif %}
+
 {% endblock %}

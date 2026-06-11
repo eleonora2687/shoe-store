@@ -1,6 +1,7 @@
 from django.db.models import Q # type: ignore
 from django.shortcuts import redirect, render, get_object_or_404 # type: ignore
-from .models import Product, Category
+from .models import Product, Category, Review
+from .forms import ReviewForm
 
 def product_list(request):
 
@@ -33,11 +34,50 @@ def product_list(request):
     )
 
 def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
 
-    return render(request, 'products/product_detail.html', {
-        'product': product
-    })
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    if request.method == 'POST':
+
+        if request.user.is_authenticated:
+
+            form = ReviewForm(
+                request.POST
+            )
+
+            if form.is_valid():
+
+                review = form.save(
+                    commit=False
+                )
+
+                review.user = request.user
+                review.product = product
+
+                review.save()
+
+                return redirect(
+                    'product_detail',
+                    id=id
+                )
+
+    else:
+        form = ReviewForm()
+
+    reviews = product.reviews.all()
+
+    return render(
+        request,
+        'products/product_detail.html',
+        {
+            'product': product,
+            'reviews': reviews,
+            'form': form
+        }
+    )
 
 def add_to_cart(request, id):
     cart = request.session.get('cart', {})
