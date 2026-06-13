@@ -1,6 +1,8 @@
 from django.db.models import Q # type: ignore
 from django.shortcuts import redirect, render, get_object_or_404 # type: ignore
-from .models import Product, Category, Review
+from .models import Product, Category, Review,Wishlist
+from django.contrib.auth.decorators import login_required
+
 from .forms import ReviewForm
 
 def product_list(request):
@@ -145,3 +147,46 @@ def decrease_quantity(request, id):
     request.session['cart'] = cart
 
     return redirect('cart_view')
+
+@login_required
+def add_to_wishlist(request, id):
+
+    product = get_object_or_404(
+        Product,
+        id=id
+    )
+
+    Wishlist.objects.get_or_create(
+        user=request.user,
+        product=product
+    )
+
+    return redirect(
+        'product_detail',
+        id=id
+    )
+
+@login_required
+def wishlist(request):
+
+    items = Wishlist.objects.filter(
+        user=request.user
+    )
+
+    return render(
+        request,
+        'products/wishlist.html',
+        {
+            'items': items
+        }
+    )
+
+@login_required
+def remove_from_wishlist(request, id):
+
+    Wishlist.objects.filter(
+        user=request.user,
+        product_id=id
+    ).delete()
+
+    return redirect('wishlist')
