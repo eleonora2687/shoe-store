@@ -21,9 +21,13 @@ def checkout(request):
 
         total += product.price * quantity
 
-    order = Order.objects.create(
-        user=request.user,
-        total=total
+        if product.stock >= quantity:
+
+            product.stock -= quantity
+            product.save()
+        order = Order.objects.create(
+            user=request.user,
+            total=total
     )
 
     for product_id, quantity in cart.items():

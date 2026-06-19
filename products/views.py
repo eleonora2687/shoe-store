@@ -82,14 +82,21 @@ def product_detail(request, id):
     )
 
 def add_to_cart(request, id):
+
+    product = get_object_or_404(Product, id=id)
+
     cart = request.session.get('cart', {})
 
-    if str(id) in cart:
-        cart[str(id)] += 1
-    else:
-        cart[str(id)] = 1
+    current_quantity = cart.get(str(id), 0)
 
-    request.session['cart'] = cart
+    if current_quantity < product.stock:
+
+        if str(id) in cart:
+            cart[str(id)] += 1
+        else:
+            cart[str(id)] = 1
+
+        request.session['cart'] = cart
 
     return redirect('cart_view')
 
@@ -126,10 +133,15 @@ def cart_view(request):
     })
 
 def increase_quantity(request, id):
+
+    product = get_object_or_404(Product, id=id)
+
     cart = request.session.get('cart', {})
 
     if str(id) in cart:
-        cart[str(id)] += 1
+
+        if cart[str(id)] < product.stock:
+            cart[str(id)] += 1
 
     request.session['cart'] = cart
 
