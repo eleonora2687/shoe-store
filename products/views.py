@@ -2,6 +2,7 @@ from django.db.models import Q # type: ignore
 from django.shortcuts import redirect, render, get_object_or_404 # type: ignore
 from .models import Product, Category, Review,Wishlist
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .forms import ReviewForm
 
@@ -26,12 +27,20 @@ def product_list(request):
             category_id=category_id
         )
 
+    paginator = Paginator(products, 6)  # 6 products per page
+
+    page_number = request.GET.get('page')
+
+    page_obj = paginator.get_page(page_number)
+
+
     return render(
         request,
         'products/product_list.html',
         {
             'products': products,
-            'categories': categories
+            'categories': categories,
+            'page_obj': page_obj
         }
     )
 

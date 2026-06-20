@@ -6,7 +6,6 @@ Home
 
 {% block content %}
 
-
 <form method="GET" class="mb-4">
 
     <div class="row">
@@ -63,14 +62,13 @@ Home
 
 </form>
 
-
 <h1 class="text-center mb-5">
     Latest Shoes
 </h1>
 
 <div class="row">
 
-    {% for product in products %}
+    {% for product in page_obj %}
 
     <div class="col-md-4 mb-4">
 
@@ -128,8 +126,90 @@ Home
 
     </div>
 
+    {% empty %}
+
+    <div class="col-12">
+
+        <div class="alert alert-info">
+            No products found.
+        </div>
+
+    </div>
+
     {% endfor %}
 
 </div>
+
+<nav class="mt-5">
+
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page=1"
+            >
+                First
+            </a>
+
+        </li>
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ page_obj.previous_page_number }}"
+            >
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        <li class="page-item active">
+
+            <span class="page-link">
+
+                Page {{ page_obj.number }}
+                of
+                {{ page_obj.paginator.num_pages }}
+
+            </span>
+
+        </li>
+
+        {% if page_obj.has_next %}
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ page_obj.next_page_number }}"
+            >
+                Next
+            </a>
+
+        </li>
+
+        <li class="page-item">
+
+            <a
+                class="page-link"
+                href="?page={{ page_obj.paginator.num_pages }}"
+            >
+                Last
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
 
 {% endblock %}
