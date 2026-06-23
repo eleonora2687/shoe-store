@@ -10,7 +10,7 @@ Home
 
     <div class="row">
 
-        <div class="col-md-5">
+        <div class="col-md-4">
 
             <input
                 type="text"
@@ -22,7 +22,7 @@ Home
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
 
             <select
                 name="category"
@@ -51,6 +51,66 @@ Home
         </div>
 
         <div class="col-md-3">
+
+            <select
+                name="sort"
+                class="form-select"
+            >
+
+                <option value="">
+                    Sort By
+                </option>
+
+                <option
+                    value="price_low"
+                    {% if request.GET.sort == 'price_low' %}
+                    selected
+                    {% endif %}
+                >
+                    Price: Low → High
+                </option>
+
+                <option
+                    value="price_high"
+                    {% if request.GET.sort == 'price_high' %}
+                    selected
+                    {% endif %}
+                >
+                    Price: High → Low
+                </option>
+
+                <option
+                    value="name_asc"
+                    {% if request.GET.sort == 'name_asc' %}
+                    selected
+                    {% endif %}
+                >
+                    Name: A → Z
+                </option>
+
+                <option
+                    value="name_desc"
+                    {% if request.GET.sort == 'name_desc' %}
+                    selected
+                    {% endif %}
+                >
+                    Name: Z → A
+                </option>
+
+                <option
+                    value="newest"
+                    {% if request.GET.sort == 'newest' %}
+                    selected
+                    {% endif %}
+                >
+                    Newest
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
 
             <button class="btn btn-dark w-100">
                 Search
@@ -91,7 +151,7 @@ Home
 
                     <a
                         href="{% url 'product_detail' product.id %}"
-                        style="text-decoration:none;"
+                        style="text-decoration: none;"
                     >
                         {{ product.name }}
                     </a>
@@ -150,7 +210,7 @@ Home
 
             <a
                 class="page-link"
-                href="?page=1"
+                href="?search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}&page=1"
             >
                 First
             </a>
@@ -161,7 +221,7 @@ Home
 
             <a
                 class="page-link"
-                href="?page={{ page_obj.previous_page_number }}"
+                href="?search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}&page={{ page_obj.previous_page_number }}"
             >
                 Previous
             </a>
@@ -188,7 +248,7 @@ Home
 
             <a
                 class="page-link"
-                href="?page={{ page_obj.next_page_number }}"
+                href="?search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}&page={{ page_obj.next_page_number }}"
             >
                 Next
             </a>
@@ -199,7 +259,7 @@ Home
 
             <a
                 class="page-link"
-                href="?page={{ page_obj.paginator.num_pages }}"
+                href="?search={{ request.GET.search }}&category={{ request.GET.category }}&sort={{ request.GET.sort }}&page={{ page_obj.paginator.num_pages }}"
             >
                 Last
             </a>

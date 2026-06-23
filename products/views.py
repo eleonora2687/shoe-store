@@ -1,10 +1,14 @@
 from django.db.models import Q # type: ignore
 from django.shortcuts import redirect, render, get_object_or_404 # type: ignore
-from .models import Product, Category, Review,Wishlist
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from .models import Product, Category, Review, Wishlist
+from django.contrib.auth.decorators import login_required # type: ignore
+from django.core.paginator import Paginator # type: ignore
 
 from .forms import ReviewForm
+
+
+from .models import Product, Category
+
 
 def product_list(request):
 
@@ -12,9 +16,8 @@ def product_list(request):
 
     categories = Category.objects.all()
 
+    # Search
     search = request.GET.get('search')
-
-    category_id = request.GET.get('category')
 
     if search:
         products = products.filter(
@@ -22,25 +25,45 @@ def product_list(request):
             Q(brand__icontains=search)
         )
 
+    # Category Filter
+    category_id = request.GET.get('category')
+
     if category_id:
         products = products.filter(
             category_id=category_id
         )
 
-    paginator = Paginator(products, 6)  # 6 products per page
+    # Sorting
+    sort = request.GET.get('sort')
+
+    if sort == 'price_low':
+        products = products.order_by('price')
+
+    elif sort == 'price_high':
+        products = products.order_by('-price')
+
+    elif sort == 'name_asc':
+        products = products.order_by('name')
+
+    elif sort == 'name_desc':
+        products = products.order_by('-name')
+
+    elif sort == 'newest':
+        products = products.order_by('-id')
+
+    # Pagination
+    paginator = Paginator(products, 6)
 
     page_number = request.GET.get('page')
 
     page_obj = paginator.get_page(page_number)
 
-
     return render(
         request,
         'products/product_list.html',
         {
-            'products': products,
+            'page_obj': page_obj,
             'categories': categories,
-            'page_obj': page_obj
         }
     )
 
