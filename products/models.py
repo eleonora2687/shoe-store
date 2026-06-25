@@ -1,5 +1,6 @@
 from django.db import models # type: ignore
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -25,7 +26,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
     
-from django.contrib.auth.models import User
+    def average_rating(self):
+
+        avg = self.reviews.aggregate(
+            Avg('rating')
+        )['rating__avg']
+
+        return round(avg, 1) if avg else 0
 
 class Review(models.Model):
 
